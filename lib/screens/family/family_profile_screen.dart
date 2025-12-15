@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/router/routes.dart';
+import '../../config/screen_sizer/size_extension.dart';
 import '../../config/shared/widgets/error-dialoge.dart';
 import '../../core/models/invitation-model.dart';
 import '../../core/shared-prefrences/shared-prefrences-helper.dart';
@@ -137,7 +138,7 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
           'Invitation code: $code\n'
           'Tap this link after installing the app: $deepLink\n'
           'If the link does not open the app, open AlzCare manually, go to "Accept Invitation", and enter the code above.',
-      'مرحباً ${friendlyName}تمت دعوتك للانضمام كمريض.\n'
+      'مرحباً $friendlyNameتمت دعوتك للانضمام كمريض.\n'
           'رمز الدعوة: $code\n'
           'اضغط على هذا الرابط بعد تثبيت التطبيق: $deepLink\n'
           'إذا لم يفتح الرابط التطبيق، افتح AlzCare يدوياً، اذهب إلى "قبول الدعوة"، وأدخل الرمز أعلاه.',
@@ -270,7 +271,12 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
           child: BlocBuilder<InvitationCubit, InvitationState>(
             builder: (context, state) {
               return AlertDialog(
-                title: Text(tr('Invite a Patient', 'دعوة مريض')),
+                title: Text(
+                  tr('Invite a Patient', 'دعوة مريض'), style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: context.sp(18),
+                ),),
                 content: SingleChildScrollView(
                   child: Form(
                     key: formKey,
@@ -280,39 +286,146 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                         TextFormField(
                           controller: nameCtrl,
                           decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppTheme.teal500.withOpacity(0.1),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            labelStyle: TextStyle(
+                                color: AppTheme.teal900,
+                                fontSize: context.sp(18),
+                                fontWeight: FontWeight.w500
+                            ),
                             labelText: tr('Patient Name', 'اسم المريض'),
-                            prefixIcon: const Icon(Icons.person),
+                            prefixIcon: Icon(
+                              Icons.person, color: AppTheme.teal500,
+                              size: context.sp(24),),
                           ),
-                          validator: (v) => v == null || v.trim().isEmpty
+                          validator: (v) =>
+                          v == null || v
+                              .trim()
+                              .isEmpty
                               ? tr('Name is required', 'الاسم مطلوب')
                               : null,
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: context.h(10)),
                         TextFormField(
                           controller: phoneCtrl,
                           decoration: InputDecoration(
-                            labelText: tr('Phone (optional)', 'الهاتف (اختياري)'),
-                            prefixIcon: const Icon(Icons.phone),
-                            hintText: tr('Enter phone number', 'أدخل رقم الهاتف'),
+                            filled: true,
+                            fillColor: AppTheme.cyan500.withOpacity(0.1),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.cyan500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.cyan500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.cyan500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            labelStyle: TextStyle(
+                                color: AppTheme.teal900,
+                                fontSize: context.sp(18),
+                                fontWeight: FontWeight.w500
+                            ),
+                            labelText: tr(
+                                'Phone (optional)', 'الهاتف (اختياري)'),
+                            prefixIcon: Icon(
+                              Icons.phone, color: AppTheme.cyan500,
+                              size: context.sp(24),),
                           ),
                           keyboardType: TextInputType.phone,
                           onChanged: (value) {
                             // Remove any non-digit characters except what user types
-                            final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+                            final digits = value.replaceAll(
+                                RegExp(r'[^0-9]'), '');
                             if (digits.isNotEmpty && value != digits) {
                               phoneCtrl.value = TextEditingValue(
                                 text: digits,
-                                selection: TextSelection.collapsed(offset: digits.length),
+                                selection: TextSelection.collapsed(
+                                    offset: digits.length),
                               );
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: context.h(10)),
                         TextFormField(
                           controller: emailCtrl,
                           decoration: InputDecoration(
-                            labelText: tr('Email *', 'البريد الإلكتروني *'),
-                            prefixIcon: const Icon(Icons.email),
+                            filled: true,
+                            fillColor: AppTheme.teal500.withOpacity(0.1),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    context.w(15)),
+                                borderSide: BorderSide(
+                                    color: AppTheme.teal500,
+                                    width: context.w(2)
+                                )
+                            ),
+                            labelStyle: TextStyle(
+                                color: AppTheme.teal900,
+                                fontSize: context.sp(18),
+                                fontWeight: FontWeight.w500
+                            ),
+                            labelText: tr('Email ', 'البريد الإلكتروني '),
+                            prefixIcon: Icon(
+                              Icons.email, color: AppTheme.teal500,
+                              size: context.sp(24),),
                           ),
                           keyboardType: TextInputType.emailAddress,
                           validator: (v) {
@@ -334,59 +447,76 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: Text(tr('Cancel', 'إلغاء')),
+                    child: Text(tr('Cancel', 'إلغاء'), style: TextStyle(
+                        color: AppTheme.teal500,
+                        fontSize: context.sp(18),
+                        fontWeight: FontWeight.w600
+                    ),),
                   ),
                   ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.teal500,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(context
+                                .w(15))
+                        )
+                    ),
                     onPressed: state is InvitationLoading
                         ? null
                         : () {
-                            if (formKey.currentState!.validate()) {
-                              final phone = phoneCtrl.text.trim();
-                              final email = emailCtrl.text.trim();
-                              final name = nameCtrl.text.trim();
+                      if (formKey.currentState!.validate()) {
+                        final phone = phoneCtrl.text.trim();
+                        final email = emailCtrl.text.trim();
+                        final name = nameCtrl.text.trim();
 
-                              if (email.isEmpty) {
-                                ScaffoldMessenger.of(ctx).showSnackBar(
-                                  SnackBar(
-                                    content: Text(tr('Email is required', 'البريد الإلكتروني مطلوب')),
-                                  ),
-                                );
-                                return;
-                              }
+                        if (email.isEmpty) {
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            SnackBar(
+                              content: Text(tr('Email is required', 'البريد الإلكتروني مطلوب')),
+                            ),
+                          );
+                          return;
+                        }
 
-                              final familyUid = SharedPrefsHelper.getString("familyUid") ??
-                                  SharedPrefsHelper.getString("userId");
-                              if (familyUid == null) {
-                                Navigator.pop(ctx);
-                                showErrorDialog(
-                                  context: context,
-                                  error: tr("Family member ID not found", "تعذّر العثور على معرف عضو العائلة"),
-                                  title: tr("Error", "خطأ"),
-                                );
-                                return;
-                              }
+                        final familyUid = SharedPrefsHelper.getString("familyUid") ??
+                            SharedPrefsHelper.getString("userId");
+                        if (familyUid == null) {
+                          Navigator.pop(ctx);
+                          showErrorDialog(
+                            context: context,
+                            error: tr("Family member ID not found", "تعذّر العثور على معرف عضو العائلة"),
+                            title: tr("Error", "خطأ"),
+                          );
+                          return;
+                        }
 
-                              // Add +2 prefix to phone number automatically
-                              String? finalPhone = phone.isNotEmpty 
-                                  ? (phone.startsWith('+2') ? phone : '+2$phone')
-                                  : null;
-                              
-                              context.read<InvitationCubit>().createInvitationFromFamily(
-                                    familyMemberId: familyUid,
-                                    patientEmail: email,
-                                    patientPhone: finalPhone,
-                                    patientName: name,
-                                  );
-                            }
-                          },
+                        // Add +2 prefix to phone number automatically
+                        String? finalPhone = phone.isNotEmpty
+                            ? (phone.startsWith('+2') ? phone : '+2$phone')
+                            : null;
+
+                        context.read<InvitationCubit>().createInvitationFromFamily(
+                          familyMemberId: familyUid,
+                          patientEmail: email,
+                          patientPhone: finalPhone,
+                          patientName: name,
+                        );
+                      }
+                    },
                     icon: state is InvitationLoading
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.arrow_forward),
-                    label: Text(tr('Continue', 'متابعة')),
+                        ? SizedBox(
+                      width: context.w(16),
+                      height: context.h(16),
+                      child: CircularProgressIndicator(strokeWidth: context.w(
+                          2), color: AppTheme.cyan500,),
+                    )
+                        : Icon(Icons.arrow_forward, color: Colors.white,
+                      size: context.sp(18),),
+                    label: Text(tr('Continue', 'متابعة'), style: TextStyle(
+                        color: Colors.white,
+                        fontSize: context.sp(18),
+                        fontWeight: FontWeight.w600
+                    ),),
                   ),
                 ],
               );
@@ -512,44 +642,112 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(context.w(20))),
       ),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-          top: 24,
-        ),
-        child: Form(
-          key: formKey,
+      builder: (ctx) =>
+          Padding(
+            padding: EdgeInsets.only(
+              left: context.w(16),
+              right: context.w(16),
+              bottom: MediaQuery
+                  .of(ctx)
+                  .viewInsets
+                  .bottom + 16,
+              top: context.h(24),
+            ),
+            child: Form(
+              key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 tr('Edit Contact Info', 'تعديل بيانات التواصل'),
-                style: const TextStyle(
-                  fontSize: 18,
+                style: TextStyle(
+                  fontSize: context.sp(18),
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.teal900,
+                  color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.h(20)),
               TextFormField(
                 controller: phoneCtrl,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppTheme.teal500.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.teal500,
+                          width: context.w(2)
+                      )
+                  ),
+                  enabled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.teal500,
+                          width: context.w(2)
+                      )
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.teal500,
+                          width: context.w(2)
+                      )
+                  ),
                   labelText: tr('Phone number', 'رقم الهاتف'),
-                  prefixIcon: const Icon(Icons.phone),
+                  labelStyle: TextStyle(
+                      color: AppTheme.teal900,
+                      fontSize: context.sp(18),
+                      fontWeight: FontWeight.w500
+                  ),
+                  prefixIcon: Icon(
+                    Icons.phone,
+                    color: AppTheme.teal500,
+                    size: context.sp(24),
+                  ),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: context.h(18)),
               TextFormField(
                 controller: emailCtrl,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.cyan500,
+                          width: context.w(2)
+                      )
+                  ),
+                  enabled: true,
+                  labelStyle: TextStyle(
+                      color: AppTheme.teal900,
+                      fontSize: context.sp(18),
+                      fontWeight: FontWeight.w500
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.cyan500,
+                          width: context.w(2)
+                      )
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(context.w(15)),
+                      borderSide: BorderSide(
+                          color: AppTheme.cyan500,
+                          width: context.w(2)
+                      )
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.cyan500.withOpacity(0.1),
                   labelText: tr('Email address', 'البريد الإلكتروني'),
-                  prefixIcon: const Icon(Icons.email),
+                  prefixIcon: Icon(Icons.email, color: AppTheme.cyan500,
+                    size: context.sp(24),),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
@@ -557,39 +755,58 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                     return tr('Email is required', 'البريد الإلكتروني مطلوب');
                   }
                   final regex =
-                      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                  RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                   if (!regex.hasMatch(value.trim())) {
-                    return tr('Enter a valid email', 'أدخل بريدًا إلكترونيًا صحيحًا');
+                    return tr(
+                        'Enter a valid email', 'أدخل بريدًا إلكترونيًا صحيحًا');
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: context.h(20)),
               SizedBox(
                 width: double.infinity,
+                height: context.h(45),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.teal500,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(
+                              context.w(20))
+                      )
+                  ),
                   onPressed: () async {
                     if (!formKey.currentState!.validate()) return;
                     try {
-                      final userService = UserService();
-                      await userService.updateUser(profile.userId, {
-                        'phone': phoneCtrl.text.trim().isEmpty
+                      final familyMemberService = FamilyMemberService();
+                      await familyMemberService.updateFamilyMember(
+                          profile.userId, {
+                        'phone': phoneCtrl.text
+                            .trim()
+                            .isEmpty
                             ? null
-                            : phoneCtrl.text.trim(),
+                            : "+2${phoneCtrl.text.trim()}",
                         'email': emailCtrl.text.trim(),
                       });
                       if (mounted) {
                         Navigator.pop(ctx);
-                        _showSnack(tr('Contact info updated', 'تم تحديث بيانات التواصل'));
+                        _showSnack(tr(
+                            'Contact info updated', 'تم تحديث بيانات التواصل'));
                         setState(() {
                           _profileFuture = _loadProfileData();
                         });
                       }
                     } catch (e) {
-                      _showSnack(tr('Failed to update', 'فشل التحديث') + ': $e');
+                      _showSnack('${tr(
+                          'Failed to update', 'فشل التحديث')}: $e');
                     }
                   },
-                  child: Text(tr('Save Changes', 'حفظ التغييرات')),
+                  child: Text(tr('Save Changes', 'حفظ التغييرات'),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: context.sp(18),
+                        fontWeight: FontWeight.w600
+                    ),),
                 ),
               ),
             ],
@@ -625,7 +842,7 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _uploadingPhoto = false);
-      _showSnack(tr('Failed to update photo', 'فشل تحديث الصورة') + ': $e');
+      _showSnack('${tr('Failed to update photo', 'فشل تحديث الصورة')}: $e');
     }
   }
 
@@ -657,13 +874,14 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
     Widget content;
 
     if (_isFetchingInvites) {
-      content = const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: CircularProgressIndicator()),
+      content = Padding(
+        padding: EdgeInsets.symmetric(vertical: context.h(24)),
+        child: Center(child: CircularProgressIndicator(
+          strokeWidth: context.w(2), color: AppTheme.cyan500,)),
       );
     } else if (_invitesError != null) {
       content = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: context.h(16)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -674,7 +892,7 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
             const SizedBox(height: 12),
             ElevatedButton.icon(
               onPressed: _loadInvitations,
-              icon: const Icon(Icons.refresh),
+              icon: Icon(Icons.refresh, size: context.w(24),),
               label: const Text('Retry'),
             ),
           ],
@@ -682,19 +900,26 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
       );
     } else if (_sentInvitations.isEmpty) {
       content = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: EdgeInsets.symmetric(vertical: context.h(24)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               tr('No invitations sent yet.', 'لم يتم إرسال دعوات بعد.'),
-              style: const TextStyle(color: AppTheme.gray600),
+              style: TextStyle(color: AppTheme.gray600,
+                  fontSize: context.sp(16),
+                  fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: context.h(8)),
             OutlinedButton.icon(
               onPressed: _openInviteDialog,
-              icon: const Icon(Icons.person_add),
-              label: Text(tr('Invite a patient', 'دعوة مريض')),
+              icon: Icon(Icons.person_add, color: AppTheme.teal500,
+                size: context.sp(23),),
+              label: Text(tr('Invite a patient', 'دعوة مريض'), style: TextStyle(
+                  fontSize: context.sp(15),
+                  color: AppTheme.tealDark,
+                  fontWeight: FontWeight.w600
+              ),),
             ),
           ],
         ),
@@ -742,8 +967,13 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${invite.createdAt.toLocal().toString().split(' ').first}',
-                      style: const TextStyle(fontSize: 10, color: AppTheme.gray500),
+                      invite.createdAt
+                          .toLocal()
+                          .toString()
+                          .split(' ')
+                          .first,
+                      style: const TextStyle(
+                          fontSize: 10, color: AppTheme.gray500),
                     ),
                   ],
                 ),
@@ -872,7 +1102,7 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                           icon: Icon(
                             _isAr ? Icons.language : Icons.translate,
                             color: AppTheme.teal600,
-                            size: 28,
+                            size: context.sp(28),
                           ),
                           tooltip: _isAr ? 'English' : 'العربية',
                           onPressed: () {
@@ -886,38 +1116,40 @@ class _FamilyProfileScreenState extends State<FamilyProfileScreen> {
                       const SizedBox(height: 8),
                       _ProfileHeader(
                         userName: profile.userName,
-                        caregiverRole: profile.user?['role'] ?? tr('Caregiver', 'مقدم رعاية'),
+                        caregiverRole: profile.user?['role'] ?? tr('Caregiver',
+                            'مقدم رعاية'),
                         caringFor: profile.caringForName,
                         avatarUrl: profile.familyImageUrl,
                         uploading: _uploadingPhoto,
                         onAvatarTap: () => _changeAvatar(profile),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.h(16)),
                       _PatientCard(patients: profile.patients),
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.h(16)),
                       _ContactInfoCard(
-                        phone: profile.userPhone ?? tr('Add phone number', 'إضافة رقم هاتف'),
-                        email: profile.userEmail ?? tr('Add email', 'إضافة بريد إلكتروني'),
+                        phone: profile.userPhone ?? tr('Add phone number',
+                            'إضافة رقم هاتف'),
+                        email: profile.userEmail ?? tr('Add email',
+                            'إضافة بريد إلكتروني'),
                         onEdit: () => _openEditContactSheet(profile),
                       ),
-                      const SizedBox(height: 16),
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.h(16)),
                       _buildInvitationsCard(),
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.h(16)),
                       _DoctorContactCard(
                         doctorName: profile.doctorName,
                         doctorPhone: profile.doctorPhone,
                         doctorEmail: profile.doctorEmail,
                         onCall: () => _callDoctor(profile.doctorPhone),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.h(16)),
                       _PrimaryButton(
                         icon: Icons.person_add_alt_1,
                         label: tr('Invite Patient', 'دعوة مريض'),
                         color: AppTheme.teal600,
                         onPressed: _openInviteDialog,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: context.h(12)),
                       _PrimaryButton(
                         icon: Icons.logout,
                         label: tr('Logout', 'تسجيل الخروج'),
@@ -954,34 +1186,34 @@ class _InfoRow extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 40,
-          height: 40,
+          width: context.w(40),
+          height: context.h(40),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(context.w(10)),
           ),
           child: Icon(
             icon,
             color: color,
-            size: 20,
+            size: context.sp(20),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: context.w(12)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: context.sp(14),
                   color: AppTheme.gray500,
                 ),
               ),
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: TextStyle(
+                  fontSize: context.sp(16),
                   color: AppTheme.teal900,
                 ),
               ),
@@ -1024,10 +1256,11 @@ class _ProfileHeader extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      width: double.infinity,
+      padding: EdgeInsets.all(context.w(24)),
       decoration: BoxDecoration(
         gradient: AppTheme.tealGradient,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(context.w(24)),
       ),
       child: Column(
         children: [
@@ -1036,15 +1269,15 @@ class _ProfileHeader extends StatelessWidget {
             child: Stack(
               children: [
                 CircleAvatar(
-                  radius: 48,
+                  radius: context.w(58),
                   backgroundColor: Colors.white,
                   backgroundImage: avatarImage,
                   child: avatarImage == null
-                      ? const Icon(
-                          Icons.person,
-                          size: 48,
-                          color: AppTheme.teal500,
-                        )
+                      ? Icon(
+                    Icons.person,
+                    size: context.sp(48),
+                    color: AppTheme.teal500,
+                  )
                       : null,
                 ),
                 Positioned(
@@ -1057,51 +1290,53 @@ class _ProfileHeader extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: uploading
-                        ? const SizedBox(
-                            width: 14,
-                            height: 14,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(
-                            Icons.photo_camera,
-                            size: 16,
-                            color: AppTheme.teal600,
-                          ),
+                        ? SizedBox(
+                      width: context.w(14),
+                      height: context.w(14),
+                      child: CircularProgressIndicator(
+                          strokeWidth: context.w(2)),
+                    )
+                        : Icon(
+                      Icons.photo_camera,
+                      size: context.sp(16),
+                      color: AppTheme.teal600,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.h(2)),
           Text(
             userName,
-            style: const TextStyle(
-              fontSize: 24,
+            style: TextStyle(
+              fontSize: context.sp(24),
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: context.h(4)),
           Text(
             caregiverRole,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFFCFFAFE),
+            style: TextStyle(
+              fontSize: context.sp(20),
+              color: const Color(0xFFCFFAFE),
             ),
           ),
           if (caringFor != null) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: context.h(12)),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.w(16), vertical: context.sp(6)),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(context.w(12)),
               ),
               child: Text(
                 tr(context, 'Caring for $caringFor', 'رعاية $caringFor'),
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: context.sp(14),
                 ),
               ),
             ),
@@ -1132,49 +1367,51 @@ class _PatientCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(context.w(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               tr(context, 'Primary Patient', 'المريض الأساسي'),
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: context.sp(18),
                 fontWeight: FontWeight.bold,
                 color: AppTheme.teal900,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: context.h(16)),
             if (firstPatient == null)
               Text(
-                tr(context, 'No patients linked yet. Invite a patient to start tracking.', 'لا يوجد مرضى مرتبطين بعد. ادعُ مريضاً لبدء التتبع.'),
+                tr(context,
+                    'No patients linked yet. Invite a patient to start tracking.',
+                    'لا يوجد مرضى مرتبطين بعد. ادعُ مريضاً لبدء التتبع.'),
                 style: const TextStyle(color: AppTheme.gray600),
               )
             else
               Row(
                 children: [
                   Container(
-                    width: 56,
-                    height: 56,
+                    width: context.w(56),
+                    height: context.w(56),
                     decoration: BoxDecoration(
                       color: AppTheme.teal50,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.person,
                       color: AppTheme.teal600,
-                      size: 28,
+                      size: context.sp(28),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: context.w(16)),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           firstPatient['name'] ?? 'Patient',
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: context.sp(16),
                             fontWeight: FontWeight.bold,
                             color: AppTheme.teal900,
                           ),
@@ -1212,7 +1449,7 @@ class _ContactInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(context.w(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1220,11 +1457,12 @@ class _ContactInfoCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    tr(context, 'My Contact Information', 'بيانات التواصل الخاصة بي'),
+                    tr(context, 'My Contact Information',
+                        'بيانات التواصل الخاصة بي'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: context.sp(18),
                       fontWeight: FontWeight.bold,
                       color: AppTheme.teal900,
                     ),
@@ -1232,18 +1470,22 @@ class _ContactInfoCard extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: onEdit,
-                  child: Text(tr(context, 'Edit', 'تعديل')),
+                  child: Text(tr(context, 'Edit', 'تعديل'), style: TextStyle(
+                      fontSize: context.sp(18),
+                      color: AppTheme.tealDark,
+                      fontWeight: FontWeight.w500
+                  ),),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: context.h(16)),
             _InfoRow(
               icon: Icons.phone,
               label: tr(context, 'Phone', 'الهاتف'),
               value: phone,
               color: AppTheme.teal500,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: context.h(16)),
             _InfoRow(
               icon: Icons.email,
               label: tr(context, 'Email', 'البريد الإلكتروني'),

@@ -50,22 +50,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned(
-            top: -width * 0.25,
-            left: -width * 0.15,
-            child: DecorCircle(size: width * 0.7),
+            top: -context.w(430) * 0.25,
+            left: -context.w(430) * 0.15,
+            child: DecorCircle(size: context.w(430) * 0.7),
           ),
           Positioned(
-            bottom: -width * 0.3,
-            right: -width * 0.2,
-            child: DecorCircle(size: width * 0.9),
+            bottom: -context.w(430) * 0.3,
+            right: -context.w(430) * 0.2,
+            child: DecorCircle(size: context.w(430) * 0.9),
           ),
 
           // Content
@@ -308,7 +306,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             SizedBox(height: context.h(16)),
                             // Already have an account? Sign in
                             buildSignInLink(context),
-                            SizedBox(height: context.h(8)),
+                            SizedBox(height: context.h(20)),
                           ],
                         ),
                         if (state is SignUpLoading || state is AddFamilyLoading)

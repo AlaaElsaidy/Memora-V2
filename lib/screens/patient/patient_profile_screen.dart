@@ -165,6 +165,10 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
     });
   }
 
+  // Future<String?> _getFamilyMemberPhone() async {
+  //   UserService userService = UserService();
+
+  // }
   Future<void> _loadProfileData() async {
     final patientUid = SharedPrefsHelper.getString("patientUid") ??
         SharedPrefsHelper.getString("userId");
@@ -292,9 +296,12 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
         _phoneCtrl.text = updatedPatient.phone;
         _emailCtrl.text = updatedPatient.email;
         _addressCtrl.text = updatedPatient.address;
+        _ageCtrl.text = resolvedAge > 0 ? resolvedAge.toString() : '';
+        _medicalHistoryCtrl.text = updatedPatient.medicalHistory ?? '';
         _emergencyPhoneCtrl.text = familyContact?.phone.isNotEmpty == true
             ? familyContact!.phone
             : (updatedPatient.emergencyContact?.phone ?? '');
+        _rebuildMedicationFields(updatedPatient.medications);
         _loading = false;
       });
     } catch (e) {
@@ -548,13 +555,21 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
           // NOTE: مؤقتًا مش هنحدّث alzheimer_stage من شاشة المريض
           'medical_history': medicalHistory.isNotEmpty ? medicalHistory : null,
           'medications': medications
-              .map((m) => {
-                    'name': m.name,
-                    'dose': m.dose,
-                    'frequency': m.frequency,
-                  })
+              .map((m) =>
+          {
+            'name': m.name,
+            'dose': m.dose,
+            'frequency': m.frequency,
+          })
               .toList(),
         }));
+      }
+
+      // Update family member phone if there's a linked family contact
+      if (_familyContact != null && _familyContact!.id != null &&
+          emergencyPhone.isNotEmpty) {
+        futures.add(_patientFamilyService.updateFamilyMemberPhone(
+            _familyContact!.id!, emergencyPhone));
       }
 
       await Future.wait(futures);
@@ -797,13 +812,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                         ),
                         const SizedBox(height: 12),
                         if (_editing) ...[
-                          _buildTextField(
-                            controller: _ageCtrl,
-                            label: tr('Age (years)', 'العمر (بالسنوات)'),
-                            icon: Icons.cake,
-                            keyboardType: TextInputType.number,
-                          ),
-                          const SizedBox(height: 10),
                           TextFormField(
                             controller: _medicalHistoryCtrl,
                             maxLines: 3,
@@ -825,14 +833,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                             ),
                           ),
                         ] else ...[
-                          _InfoRow(
-                            icon: Icons.cake,
-                            label: tr('Age', 'العمر'),
-                            value: p.age > 0
-                                ? (_isAr ? '${p.age} سنة' : '${p.age} years')
-                                : tr('Not specified', 'غير محدد'),
-                            color: AppTheme.teal500,
-                          ),
                           if ((_medicalHistory ?? '').isNotEmpty) ...[
                             const SizedBox(height: 12),
                             Row(
@@ -1106,12 +1106,16 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                             icon: Icons.email,
                             keyboardType: TextInputType.emailAddress,
                             validator: (v) {
-                              if (v == null || v.trim().isEmpty)
+                              if (v == null || v
+                                  .trim()
+                                  .isEmpty) {
                                 return tr('Email is required',
                                     'البريد الإلكتروني مطلوب');
-                              if (!v.contains('@'))
+                              }
+                              if (!v.contains('@')) {
                                 return tr('Enter a valid email',
                                     'أدخل بريدًا إلكترونيًا صحيحًا');
+                              }
                               return null;
                             },
                           ),
@@ -1120,9 +1124,19 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                             controller: _addressCtrl,
                             label: tr('Address', 'العنوان'),
                             icon: Icons.location_on,
-                            validator: (v) => (v == null || v.trim().isEmpty)
+                            validator: (v) =>
+                            (v == null || v
+                                .trim()
+                                .isEmpty)
                                 ? tr('Address is required', 'العنوان مطلوب')
                                 : null,
+                          ),
+                          const SizedBox(height: 10),
+                          _buildTextField(
+                            controller: _ageCtrl,
+                            label: tr('Age (years)', 'العمر (بالسنوات)'),
+                            icon: Icons.cake,
+                            keyboardType: TextInputType.number,
                           ),
                         ] else ...[
                           _InfoRow(
@@ -1147,6 +1161,14 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                               icon: Icons.location_on,
                               label: tr('Address', 'العنوان'),
                               value: p.address,
+                              color: AppTheme.teal500),
+                          const SizedBox(height: 10),
+                          _InfoRow(
+                              icon: Icons.cake,
+                              label: tr('Age', 'العمر'),
+                              value: p.age > 0
+                                  ? (_isAr ? '${p.age} سنة' : '${p.age} years')
+                                  : tr('Not specified', 'غير محدد'),
                               color: AppTheme.teal500),
                         ],
                       ],

@@ -132,7 +132,8 @@ class ServiceItem extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.check_circle, size: 16, color: AppColors.primaryColor),
+          const Icon(
+              Icons.check_circle, size: 16, color: AppColors.primaryColor),
           SizedBox(width: context.w(6)),
           Text(
             label,

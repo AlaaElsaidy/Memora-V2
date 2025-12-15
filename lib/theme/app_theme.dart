@@ -47,7 +47,6 @@ class AppTheme {
       primary: tealPrimary,
       secondary: cyanPrimary,
       surface: Colors.white,
-      background: gray50,
     ),
     scaffoldBackgroundColor: Colors.transparent,
     fontFamily: 'System',

@@ -2,6 +2,7 @@ import 'package:alzcare/config/router/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../login/presentation/pages/login.dart';
+import '../../login/presentation/pages/reset_password.dart';
 import '../../screens/doctor/doctor_main_screen.dart';
 import '../../screens/family/doctors-selection/presentation/pages/doctorScreen.dart';
 import '../../screens/family/family_main_screen.dart';
@@ -41,9 +42,6 @@ class AppRouter {
       case AppRoutes.doctorMain:
         return MaterialPageRoute(
             builder: (context) => const DoctorMainScreen());
-      case AppRoutes.patientMain:
-        return MaterialPageRoute(
-            builder: (context) => const PatientMainScreen());
 
       case AppRoutes.service:
         return MaterialPageRoute(builder: (context) => const ServiceScreen());
@@ -51,11 +49,15 @@ class AppRouter {
       case AppRoutes.paymentDetails:
         return MaterialPageRoute(
             builder: (context) => const PaymentDetailsScreen());
+      case AppRoutes.resetPassword:
+        return MaterialPageRoute(
+            builder: (context) => const ResetPasswordScreen());
 
       case AppRoutes.invitationAcceptance:
         final code = settings.arguments as String?;
         return MaterialPageRoute(
-            builder: (context) => InvitationAcceptanceScreen(
+            builder: (context) =>
+                InvitationAcceptanceScreen(
                   invitationCode: code,
                 ));
 

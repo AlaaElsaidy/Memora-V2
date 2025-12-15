@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenSizer(
-      size: const Size(430, 932),
+      designSize: const Size(412, 890),
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,

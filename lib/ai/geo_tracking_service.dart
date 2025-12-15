@@ -163,7 +163,7 @@ class GeoTrackingService {
       } else if (isInSafeZone && currentZoneId != _lastZoneId) {
         // Patient entered a safe zone
         _lastZoneId = currentZoneId;
-        debugPrint('Patient entered safe zone: ${currentZoneId}');
+        debugPrint('Patient entered safe zone: $currentZoneId');
       }
     } catch (e) {
       debugPrint('Error processing position update: $e');

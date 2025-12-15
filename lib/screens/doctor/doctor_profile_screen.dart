@@ -100,6 +100,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     setState(() => _uploadingPhoto = true);
     try {
       final url = await _doctorService.uploadDoctorPhoto(data.doctorId, file);
+      await _doctorService.updateDoctorPhoto(data.doctorId, url);
       await SharedPrefsHelper.saveString('doctorPhotoUrl', url);
       if (!mounted) return;
       setState(() {
@@ -108,7 +109,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
       });
       _showSnack(tr('Profile photo updated', 'تم تحديث صورة الملف الشخصي'));
     } catch (e) {
-      _showSnack(tr('Failed to upload photo', 'فشل رفع الصورة') + ': $e');
+      _showSnack('${tr('Failed to upload photo', 'فشل رفع الصورة')}: $e');
     } finally {
       if (mounted) {
         setState(() => _uploadingPhoto = false);
@@ -129,7 +130,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
       }
       if (mounted) Navigator.of(context).maybePop();
     } catch (e) {
-      _showSnack(tr('Image pick error', 'خطأ في اختيار الصورة') + ': $e');
+      _showSnack('${tr('Image pick error', 'خطأ في اختيار الصورة')}: $e');
     }
   }
 
@@ -254,7 +255,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                         });
                       }
                     } catch (e) {
-                      _showSnack(tr('Failed to update', 'فشل التحديث') + ': $e');
+                      _showSnack('${tr(
+                          'Failed to update', 'فشل التحديث')}: $e');
                     }
                   },
                   child: Text(tr('Save Changes', 'حفظ التغييرات')),

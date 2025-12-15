@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // ADDED
 
+import '../../config/screen_sizer/size_extension.dart';
 import '../../core/shared-prefrences/shared-prefrences-helper.dart';
 import '../../core/supabase/supabase-service.dart';
 import '../../theme/app_theme.dart';
@@ -480,7 +481,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
                     const SizedBox(width: 6),
                     Text(
                       tr('Memorize the cards… ${_previewLeft}s',
-                          'حاول تحفظ الكروت… ${_previewLeft}ث'),
+                          'حاول تحفظ الكروت… $_previewLeftث'),
                       style: const TextStyle(color: AppTheme.teal600),
                     ),
                   ],

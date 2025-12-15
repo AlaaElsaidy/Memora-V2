@@ -63,7 +63,8 @@ class _FamilyNotificationsScreenState
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = tr('Failed to load notifications', 'فشل تحميل الإشعارات') + ': $e';
+        _error =
+        '${tr('Failed to load notifications', 'فشل تحميل الإشعارات')}: $e';
         _loading = false;
       });
     }

@@ -395,8 +395,8 @@ class _ChatWithDoctorScreenState extends State<ChatWithDoctorScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isMe)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
+            const Padding(
+              padding: EdgeInsets.only(right: 8),
               child: CircleAvatar(
                 radius: 16,
                 backgroundColor: AppTheme.teal500,
@@ -594,7 +594,7 @@ class _ChatWithDoctorScreenState extends State<ChatWithDoctorScreen> {
                       child: Text(
                         tr('No messages yet. Start the conversation!',
                             'لا توجد رسائل بعد. ابدأ المحادثة!'),
-                        style: TextStyle(color: AppTheme.gray500),
+                        style: const TextStyle(color: AppTheme.gray500),
                       ),
                     )
                   : ListView.builder(

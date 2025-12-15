@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 import '../core/supabase/activity-service.dart';
 import '../core/supabase/supabase-service.dart';
-import '../core/supabase/supabase-config.dart';
 import '../core/supabase/notification-service.dart';
 import '../core/shared-prefrences/shared-prefrences-helper.dart';
 import 'text_to_speech_service.dart';

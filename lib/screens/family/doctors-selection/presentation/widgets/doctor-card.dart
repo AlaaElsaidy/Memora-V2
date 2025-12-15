@@ -94,8 +94,8 @@ class DoctorCardSimple extends StatelessWidget {
                     ),
                     child: Container(
                       margin: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF9ABFBA),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF9ABFBA),
                         shape: BoxShape.circle,
                       ),
                     ),

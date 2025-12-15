@@ -57,8 +57,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return BlocProvider(
       create: (context) => LoginCubit(LoginRepo(AuthService(), UserService())),
       child: Scaffold(
@@ -91,11 +89,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 await SharedPrefsHelper.saveString(
                     "patientUid", state.user!['id']);
 
-                // لو المريض لسه أول مرة يستخدم التطبيق (لسه معملش أونبوردنج)
                 final onboarded =
                     SharedPrefsHelper.getBool('patientOnboarded') ?? false;
                 if (!onboarded) {
-                  // بعد أول لوجين يروح شاشة قبول الدعوة أولاً
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     AppRoutes.invitationAcceptance,
@@ -142,14 +138,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   // Decorative circles
                   Positioned(
-                    top: -width * 0.25,
-                    left: -width * 0.15,
-                    child: DecorCircle(size: width * 0.7),
+                    top: -context.w(430) * 0.25,
+                    left: -context.w(430) * 0.15,
+                    child: DecorCircle(size: context.w(430) * 0.7),
                   ),
                   Positioned(
-                    bottom: -width * 0.3,
-                    right: -width * 0.2,
-                    child: DecorCircle(size: width * 0.9),
+                    bottom: -context.w(430) * 0.3,
+                    right: -context.w(430) * 0.2,
+                    child: DecorCircle(size: context.w(430) * 0.9),
                   ),
 
                   // Content
@@ -305,14 +301,17 @@ class _SignInScreenState extends State<SignInScreen> {
                                             tr('Remember me', 'تذكرني'),
                                             style: TextStyle(
                                               color: const Color(0xFF2E5753),
-                                              fontSize: context.sp(14),
+                                              fontSize: context.sp(12),
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                           const Spacer(),
                                           TextButton(
                                             onPressed: () {
-                                              // TODO: go to forget password page
+                                              Navigator.pushNamed(
+                                                context,
+                                                AppRoutes.resetPassword,
+                                              );
                                             },
                                             style: TextButton.styleFrom(
                                               padding: EdgeInsets.zero,
@@ -326,7 +325,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                               style: TextStyle(
                                                 color: AppColors.primaryColor,
                                                 fontWeight: FontWeight.w700,
-                                                fontSize: context.sp(14),
+                                                fontSize: context.sp(12),
                                               ),
                                             ),
                                           ),

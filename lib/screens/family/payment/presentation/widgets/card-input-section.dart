@@ -54,6 +54,7 @@ class CardInputSection extends StatelessWidget {
               textEditingController: nameController,
               validator: (String? v) {
                 nameValidator(v);
+                return null;
               },
             ),
           ),

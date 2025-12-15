@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/screen_sizer/size_extension.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/stat_card.dart';
 import '../../core/shared-prefrences/shared-prefrences-helper.dart';
@@ -152,8 +153,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final isNarrow = width < 360;
+    final isNarrow = context.w(430) < 360;
 
     ImageProvider? avatarImage;
     if (_doctorPhotoUrl != null && _doctorPhotoUrl!.isNotEmpty) {
@@ -228,7 +228,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                       runSpacing: 12,
                       children: [
                         SizedBox(
-                          width: isNarrow ? double.infinity : (width - 16 * 2 - 12) / 2,
+                          width: isNarrow ? double.infinity : (context.w(430) -
+                              context.w(16) * 2 - context.w(12)) / 2,
                           child: StatCard(
                             icon: Icons.people,
                             label: tr('Active Patients', 'المرضى النشطين'),
@@ -238,7 +239,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                           ),
                         ),
                         SizedBox(
-                          width: isNarrow ? double.infinity : (width - 16 * 2 - 12) / 2,
+                          width: isNarrow ? double.infinity : (context.w(430) -
+                              context.w(16) * 2 - context.w(12)) / 2,
                           child: StatCard(
                             icon: Icons.calendar_today,
                             label: tr('Appointments', 'المواعيد'),
@@ -318,7 +320,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
 
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 12),
-                                  child:                                   _AppointmentItem(
+                                  child: _AppointmentItem(
                                     patientName: patientName,
                                     time: time,
                                     type: tr('Consultation', 'استشارة'),
@@ -326,7 +328,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                                     statusColor: AppTheme.teal500,
                                   ),
                                 );
-                              }).toList(),
+                              }),
                           ],
                         ),
                       ),

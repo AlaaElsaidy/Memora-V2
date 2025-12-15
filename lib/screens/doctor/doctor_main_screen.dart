@@ -102,6 +102,7 @@
 //   }
 // }
 
+import 'package:alzcare/config/screen_sizer/size_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
@@ -230,7 +231,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
               Icon(
                 icon,
                 color: isSelected ? AppTheme.teal600 : AppTheme.gray500,
-                size: 20 * textScale,
+                size: context.sp(25),
               ),
               const SizedBox(height: 4),
               Flexible(
@@ -242,7 +243,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                     fontSize: 9 * textScale,
                     color: isSelected ? AppTheme.teal600 : AppTheme.gray500,
                     fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                    isSelected ? FontWeight.w700 : FontWeight.normal,
                   ),
                 ),
               ),

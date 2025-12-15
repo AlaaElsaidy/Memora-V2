@@ -472,7 +472,7 @@ class _ProgressCard extends StatelessWidget {
           gradient: kTealGradient, borderRadius: BorderRadius.circular(16)),
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+          const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Today\'s Progress',
                 style: TextStyle(color: Color(0xFFCFFAFE), fontSize: 14)),
             SizedBox(height: 4),

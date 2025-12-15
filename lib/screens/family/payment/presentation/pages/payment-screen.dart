@@ -45,7 +45,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
       final d = _cardFormController.details;
       setState(() {
         _cardDetails = d;
-        _cardComplete = d?.complete ?? false;
+        _cardComplete = d.complete ?? false;
       });
     });
   }

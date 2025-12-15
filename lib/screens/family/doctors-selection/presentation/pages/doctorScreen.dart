@@ -75,8 +75,6 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return BlocProvider(
       create: (context) =>
           DoctorCubit(DoctorRepo(DoctorService(), FamilyMemberService()))
@@ -86,14 +84,14 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
         body: Stack(
           children: [
             Positioned(
-              top: -width * 0.25,
-              left: -width * 0.15,
-              child: _decorCircle(size: width * 0.7),
+              top: -context.w(430) * 0.25,
+              left: -context.w(430) * 0.15,
+              child: _decorCircle(size: context.w(430) * 0.7),
             ),
             Positioned(
-              bottom: -width * 0.30,
-              right: -width * 0.20,
-              child: _decorCircle(size: width * 0.9),
+              bottom: -context.w(430) * 0.30,
+              right: -context.w(430) * 0.20,
+              child: _decorCircle(size: context.w(430) * 0.9),
             ),
             SafeArea(
               child: BlocListener<DoctorCubit, DoctorState>(

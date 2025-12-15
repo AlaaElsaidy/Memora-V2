@@ -581,7 +581,8 @@ class _FamilyTrackingScreenState extends State<FamilyTrackingScreen> {
                       const SizedBox(height: 12),
 
                       _LabeledField(
-                        label: tr('Radius', 'نصف القطر') + ': ${radius.toInt()} ${tr('m', 'م')}',
+                        label: '${tr('Radius', 'نصف القطر')}: ${radius
+                            .toInt()} ${tr('m', 'م')}',
                         child: Slider(
                           min: 50,
                           max: 500,
@@ -601,7 +602,7 @@ class _FamilyTrackingScreenState extends State<FamilyTrackingScreen> {
                                 value: isActive,
                                 onChanged: (v) =>
                                     setSheetState(() => isActive = v),
-                                activeColor: AppTheme.teal500,
+                                activeThumbColor: AppTheme.teal500,
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -894,7 +895,9 @@ class _FamilyTrackingScreenState extends State<FamilyTrackingScreen> {
                                 } catch (e) {
                                   if (mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(tr('Failed to add', 'فشل الإضافة') + ': $e')),
+                                      SnackBar(content: Text('${tr(
+                                          'Failed to add',
+                                          'فشل الإضافة')}: $e')),
                                     );
                                   }
                                 }
@@ -1214,7 +1217,8 @@ class _LiveTrackingView extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          _tr(context, 'Last updated', 'آخر تحديث') + ': $lastUpdatedLabel',
+                          '${_tr(context, 'Last updated',
+                              'آخر تحديث')}: $lastUpdatedLabel',
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppTheme.gray500,
@@ -1606,7 +1610,7 @@ class _SafeZoneCardRow extends StatelessWidget {
               Switch(
                 value: isActive,
                 onChanged: onToggle,
-                activeColor: AppTheme.teal500,
+                activeThumbColor: AppTheme.teal500,
               ),
               if (onDelete != null) ...[
                 const SizedBox(width: 4),

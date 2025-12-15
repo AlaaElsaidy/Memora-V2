@@ -139,7 +139,7 @@ class _LobnaChatScreenState extends State<LobnaChatScreen> {
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: AppTheme.tealGradient,
                 shape: BoxShape.circle,
               ),
@@ -150,9 +150,9 @@ class _LobnaChatScreenState extends State<LobnaChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   'Lobna',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -219,7 +219,7 @@ class _LobnaChatScreenState extends State<LobnaChatScreen> {
                           Container(
                             width: 80,
                             height: 80,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               gradient: AppTheme.tealGradient,
                               shape: BoxShape.circle,
                             ),
@@ -352,7 +352,7 @@ class _LobnaChatScreenState extends State<LobnaChatScreen> {
             Container(
               width: 32,
               height: 32,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: AppTheme.tealGradient,
                 shape: BoxShape.circle,
               ),

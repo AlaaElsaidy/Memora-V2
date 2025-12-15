@@ -15,6 +15,9 @@ import 'package:alzcare/screens/patient/invitations/presentation/cubit/invitatio
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:alzcare/config/utilis/app_colors.dart';
+import 'package:alzcare/config/shared/widgets/decore-circle.dart';
+import 'package:alzcare/config/shared/widgets/custom-text-form.dart';
+import 'package:alzcare/config/shared/widgets/field-wrapper.dart';
 
 class InvitationAcceptanceScreen extends StatefulWidget {
   final String? invitationCode;
@@ -40,6 +43,13 @@ class _InvitationAcceptanceScreenState extends State<InvitationAcceptanceScreen>
   bool _isCreatingAccount = false;
   bool _isFetchingInvite = false;
   late final InvitationCubit _invitationCubit;
+
+  bool get _isAr =>
+      (Localizations
+          .maybeLocaleOf(context)
+          ?.languageCode ?? 'en') == 'ar';
+
+  String tr(String en, String ar) => _isAr ? ar : en;
 
   @override
   void initState() {
@@ -211,58 +221,79 @@ class _InvitationAcceptanceScreenState extends State<InvitationAcceptanceScreen>
       return const SizedBox.shrink();
     }
 
-    return Card(
+    return Container(
       margin: EdgeInsets.only(top: context.h(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Invitation Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+      padding: EdgeInsets.all(context.w(16)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        border: Border.all(
+          color: AppColors.borderColor.withOpacity(.3),
+        ),
+        borderRadius: BorderRadius.circular(context.w(12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            tr('Invitation Details', 'تفاصيل الدعوة'),
+            style: TextStyle(
+              fontSize: context.sp(16),
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF0E3E3B),
+            ),
+          ),
+          SizedBox(height: context.h(12)),
+          _DetailRow(label: tr('Status', 'الحالة'), value: invitation.status),
+          _DetailRow(
+            label: tr('Family Member ID', 'معرف عضو العائلة'),
+            value: invitation.familyMemberId ?? tr('Not provided', 'غير محدد'),
+          ),
+          _DetailRow(
+            label: tr('Email', 'البريد الإلكتروني'),
+            value: invitation.patientEmail ??
+                (_patientUid != null ? tr(
+                    'Linked to your account', 'مرتبط بحسابك') : tr(
+                    'Not provided', 'غير محدد')),
+          ),
+          _DetailRow(
+            label: tr('Phone', 'الهاتف'),
+            value: invitation.patientPhone ?? tr('Not provided', 'غير محدد'),
+          ),
+          SizedBox(height: context.h(12)),
+          Row(
+            children: [
+              Icon(
+                invitation.isExpired ? Icons.warning : Icons.pending,
+                color: invitation.isExpired ? Colors.red : Colors.orange,
+                size: 18,
               ),
-            ),
-            const SizedBox(height: 12),
-            _DetailRow(label: 'Status', value: invitation.status),
-            _DetailRow(
-              label: 'Family Member ID',
-              value: invitation.familyMemberId ?? 'Not provided',
-            ),
-            _DetailRow(
-              label: 'Email',
-              value: invitation.patientEmail ??
-                  (_patientUid != null ? 'Linked to your account' : 'Not provided'),
-            ),
-            _DetailRow(
-              label: 'Phone',
-              value: invitation.patientPhone ?? 'Not provided',
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(
-                  invitation.isExpired ? Icons.warning : Icons.pending,
-                  color: invitation.isExpired ? Colors.red : Colors.orange,
-                  size: 18,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    invitation.isExpired
-                        ? 'This invitation has expired. Ask your family member to send a new one.'
-                        : 'This invitation expires on ${invitation.expiresAt.toLocal().toString().split(" ").first}.',
-                    style: TextStyle(
-                      color: invitation.isExpired ? Colors.red : Colors.orange[700],
-                    ),
+              SizedBox(width: context.w(8)),
+              Expanded(
+                child: Text(
+                  invitation.isExpired
+                      ? tr(
+                      'This invitation has expired. Ask your family member to send a new one.',
+                      'انتهت صلاحية هذه الدعوة. اطلب من عضو العائلة إرسال دعوة جديدة.')
+                      : tr('This invitation expires on ${invitation.expiresAt
+                      .toLocal()
+                      .toString()
+                      .split(" ")
+                      .first}.',
+                      'تنتهي صلاحية هذه الدعوة في ${invitation.expiresAt
+                          .toLocal()
+                          .toString()
+                          .split(" ")
+                          .first}.'),
+                  style: TextStyle(
+                    color: invitation.isExpired ? Colors.red : Colors
+                        .orange[700],
+                    fontSize: context.sp(12),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -274,98 +305,204 @@ class _InvitationAcceptanceScreenState extends State<InvitationAcceptanceScreen>
         padding: EdgeInsets.only(top: context.h(24)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              'Need an account?',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              tr('Need an account?', 'تحتاج حساب؟'),
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: context.sp(14),
+                color: const Color(0xFF0E3E3B),
+              ),
             ),
-            SizedBox(height: 8),
-            Text('Fetch invitation details first to start account creation.'),
+            SizedBox(height: context.h(8)),
+            Text(
+              tr('Fetch invitation details first to start account creation.',
+                  'اجلب تفاصيل الدعوة أولاً لبدء إنشاء الحساب.'),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: context.sp(12),
+              ),
+            ),
           ],
         ),
       );
     }
 
-    return Card(
+    return Container(
       margin: EdgeInsets.only(top: context.h(24)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Create Patient Account',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Complete the fields below to set up your patient account before accepting the invitation.',
-              style: TextStyle(color: Colors.grey[700]),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Full Name',
-                prefixIcon: Icon(Icons.person),
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (_invitationDetails?.patientEmail == null)
-              TextField(
-                controller: _emailFallbackController,
-                decoration: const InputDecoration(
-                  labelText: 'Email Address',
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              )
-            else
-              TextField(
-                enabled: false,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  prefixIcon: const Icon(Icons.email),
-                  hintText: _invitationDetails!.patientEmail,
-                ),
-              ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock_outline),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock_outline),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _isCreatingAccount ? null : _createPatientAccount,
-                icon: _isCreatingAccount
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.person_add),
-                label: Text(
-                  _isCreatingAccount ? 'Creating account...' : 'Create Account',
-                ),
-              ),
-            ),
-          ],
+      padding: EdgeInsets.all(context.w(16)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        border: Border.all(
+          color: AppColors.borderColor.withOpacity(.3),
         ),
+        borderRadius: BorderRadius.circular(context.w(12)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            tr('Create Patient Account', 'إنشاء حساب المريض'),
+            style: TextStyle(
+              fontSize: context.sp(16),
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF0E3E3B),
+            ),
+          ),
+          SizedBox(height: context.h(12)),
+          Text(
+            tr(
+                'Complete the fields below to set up your patient account before accepting the invitation.',
+                'أكمل الحقول أدناه لإعداد حساب المريض قبل قبول الدعوة.'),
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: context.sp(12),
+            ),
+          ),
+          SizedBox(height: context.h(16)),
+
+          // Name
+          Text(
+            tr('Full Name', 'الاسم الكامل'),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: context.sp(14),
+              color: const Color(0xFF2E5753),
+              letterSpacing: context.sp(-0.2),
+            ),
+          ),
+          SizedBox(height: context.h(8)),
+          FieldWrapper(
+            icon: Icons.person,
+            child: CustomTextForm(
+              textEditingController: _nameController,
+              hintText: tr('Enter your full name', 'أدخل اسمك الكامل'),
+              validator: (v) => null,
+            ),
+          ),
+
+          SizedBox(height: context.h(12)),
+
+          // Email if needed
+          if (_invitationDetails?.patientEmail == null) ...[
+            Text(
+              tr('Email Address', 'البريد الإلكتروني'),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: context.sp(14),
+                color: const Color(0xFF2E5753),
+                letterSpacing: context.sp(-0.2),
+              ),
+            ),
+            SizedBox(height: context.h(8)),
+            FieldWrapper(
+              icon: Icons.email,
+              child: CustomTextForm(
+                textEditingController: _emailFallbackController,
+                hintText: tr('example@mail.com', 'example@mail.com'),
+                textInputType: TextInputType.emailAddress,
+                validator: (v) => null,
+              ),
+            ),
+            SizedBox(height: context.h(12)),
+          ] else
+            ...[
+              Container(
+                padding: EdgeInsets.all(context.w(12)),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                      color: AppColors.borderColor.withOpacity(.5)),
+                  borderRadius: BorderRadius.circular(context.w(8)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.email, color: Colors.grey),
+                    SizedBox(width: context.w(8)),
+                    Expanded(
+                      child: Text(
+                        _invitationDetails!.patientEmail!,
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: context.h(12)),
+            ],
+
+          // Password
+          Text(
+            tr('Password', 'كلمة المرور'),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: context.sp(14),
+              color: const Color(0xFF2E5753),
+              letterSpacing: context.sp(-0.2),
+            ),
+          ),
+          SizedBox(height: context.h(8)),
+          FieldWrapper(
+            icon: Icons.lock_outline_rounded,
+            child: CustomTextForm(
+              textEditingController: _passwordController,
+              hintText: _isAr ? '••••••••' : '••••••••',
+              secure: true,
+              validator: (v) => null,
+            ),
+          ),
+
+          SizedBox(height: context.h(12)),
+
+          // Confirm Password
+          Text(
+            tr('Confirm Password', 'تأكيد كلمة المرور'),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: context.sp(14),
+              color: const Color(0xFF2E5753),
+              letterSpacing: context.sp(-0.2),
+            ),
+          ),
+          SizedBox(height: context.h(8)),
+          FieldWrapper(
+            icon: Icons.lock_outline_rounded,
+            child: CustomTextForm(
+              textEditingController: _confirmPasswordController,
+              hintText: _isAr ? '••••••••' : '••••••••',
+              secure: true,
+              validator: (v) => null,
+            ),
+          ),
+
+          SizedBox(height: context.h(16)),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _isCreatingAccount ? null : _createPatientAccount,
+              icon: _isCreatingAccount
+                  ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+                  : const Icon(Icons.person_add),
+              label: Text(
+                _isCreatingAccount ? tr(
+                    'Creating account...', 'جارٍ إنشاء الحساب...') : tr(
+                    'Create Account', 'إنشاء الحساب'),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: context.h(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -376,18 +513,8 @@ class _InvitationAcceptanceScreenState extends State<InvitationAcceptanceScreen>
       value: _invitationCubit,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(
-            'Accept Invitation',
-            style: TextStyle(
-              color: const Color(0xFF0E3E3B),
-              fontWeight: FontWeight.w700,
-              fontSize: context.sp(20),
-            ),
-          ),
-        ),
+        // خلينا نسمح للـ body بالتمدد مع الكيبورد
+        resizeToAvoidBottomInset: true,
         body: BlocListener<InvitationCubit, InvitationState>(
           listener: (context, state) async {
             if (state is InvitationFailure) {
@@ -444,122 +571,271 @@ class _InvitationAcceptanceScreenState extends State<InvitationAcceptanceScreen>
               });
             }
           },
-          child: BlocBuilder<InvitationCubit, InvitationState>(
-            builder: (context, state) {
-              if (state is InvitationLoading) {
-                return const Center(child: LoadingPage());
-              }
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom,
+            ),
+            child: BlocBuilder<InvitationCubit, InvitationState>(
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    // Decorative circles
+                    Positioned(
+                      top: -context.w(430) * 0.25,
+                      left: -context.w(430) * 0.15,
+                      child: DecorCircle(size: context.w(430) * 0.7),
+                    ),
+                    Positioned(
+                      bottom: -context.w(430) * 0.3,
+                      right: -context.w(430) * 0.2,
+                      child: DecorCircle(size: context.w(430) * 0.9),
+                    ),
 
-              return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: context.w(18)),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: context.h(40)),
-                      Text(
-                        'Enter Invitation Code',
-                        style: TextStyle(
-                          fontSize: context.sp(24),
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF0E3E3B),
-                        ),
-                      ),
-                      SizedBox(height: context.h(8)),
-                      Text(
-                        'Please enter the invitation code you received',
-                        style: TextStyle(
-                          fontSize: context.sp(14),
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      SizedBox(height: context.h(32)),
-                      TextFormField(
-                        controller: _codeController,
-                        decoration: InputDecoration(
-                          labelText: 'Invitation Code',
-                          hintText: 'Enter code',
-                          prefixIcon: const Icon(Icons.vpn_key),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        textCapitalization: TextCapitalization.characters,
-                        validator: (v) {
-                          if (v == null || v.trim().isEmpty) {
-                            return 'Please enter invitation code';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: context.h(16)),
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          onPressed: _isFetchingInvite
-                              ? null
-                              : () {
-                                  final code = _codeController.text.trim();
-                                  if (code.isEmpty) {
-                                    showErrorDialog(
-                                      context: context,
-                                      error: "Please enter invitation code first",
-                                      title: "Missing code",
-                                    );
-                                    return;
-                                  }
-                                  _fetchInvitation(code.toUpperCase());
+                    // Content
+                    SafeArea(
+                      child: Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: context.h(40)),
+                              Text(
+                                tr('Accept Invitation', 'قبول الدعوة'),
+                                style: TextStyle(
+                                  color: const Color(0xFF0E3E3B),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: context.sp(28),
+                                ),
+                              ),
+                              SizedBox(height: context.h(6)),
+                              Text(
+                                tr('Enter your invitation code to join',
+                                    'أدخل كود الدعوة للانضمام'),
+                                style: TextStyle(
+                                  color: const Color(0xFF7EA9A3),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: context.sp(14),
+                                ),
+                              ),
+                              SizedBox(height: context.h(50)),
+
+                              // Card with form
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: context.w(18),
+                                ),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: context.w(18),
+                                    vertical: context.h(20),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color:
+                                      AppColors.borderColor.withOpacity(.5),
+                                    ),
+                                    borderRadius:
+                                    BorderRadius.circular(context.w(22)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.06),
+                                        blurRadius: 18,
+                                        offset: const Offset(0, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Form(
+                                    key: _formKey,
+                                    autovalidateMode: AutovalidateMode
+                                        .onUnfocus,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          tr('Invitation Details',
+                                              'تفاصيل الدعوة'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: context.sp(18),
+                                            color: const Color(0xFF0E3E3B),
+                                            letterSpacing: context.sp(-0.3),
+                                          ),
+                                        ),
+                                        SizedBox(height: context.h(18)),
+
+                                        // Invitation Code
+                                        Text(
+                                          tr('Invitation Code', 'كود الدعوة'),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: context.sp(14),
+                                            color: const Color(0xFF2E5753),
+                                            letterSpacing: context.sp(-0.2),
+                                          ),
+                                        ),
+                                        SizedBox(height: context.h(8)),
+                                        FieldWrapper(
+                                          icon: Icons.vpn_key,
+                                          child: CustomTextForm(
+                                            textEditingController:
+                                            _codeController,
+                                            validator: (v) {
+                                              if (v == null || v
+                                                  .trim()
+                                                  .isEmpty) {
+                                                return tr(
+                                                    'Please enter invitation code',
+                                                    'يرجى إدخال كود الدعوة');
+                                              }
+                                              return null;
+                                            },
+                                            hintText: tr(
+                                                'Enter code', 'أدخل الكود'),
+                                          ),
+                                        ),
+
+                                        SizedBox(height: context.h(16)),
+
+                                        // Fetch button
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: OutlinedButton.icon(
+                                            onPressed: _isFetchingInvite
+                                                ? null
+                                                : () {
+                                              final code = _codeController.text
+                                                  .trim();
+                                              if (code.isEmpty) {
+                                                showErrorDialog(
+                                                  context: context,
+                                                  error: tr(
+                                                      "Please enter invitation code first",
+                                                      "يرجى إدخال كود الدعوة أولاً"),
+                                                  title: tr("Missing code",
+                                                      "الكود مفقود"),
+                                                );
+                                                return;
+                                              }
+                                              _fetchInvitation(
+                                                  code.toUpperCase());
+                                            },
+                                            icon: _isFetchingInvite
+                                                ? const SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                              child: CircularProgressIndicator(
+                                                  strokeWidth: 2),
+                                            )
+                                                : const Icon(Icons.search),
+                                            label: Text(
+                                              _isFetchingInvite ? tr(
+                                                  'Looking up...',
+                                                  'جارٍ البحث...') : tr(
+                                                  'Fetch Invitation Details',
+                                                  'جلب تفاصيل الدعوة'),
+                                            ),
+                                            style: OutlinedButton.styleFrom(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: context.h(16)),
+                                              side: const BorderSide(
+                                                  color: AppColors
+                                                      .primaryColor),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius
+                                                    .circular(12),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        _buildInvitationDetails(),
+                                        _buildAccountCreationForm(),
+
+                                        SizedBox(height: context.h(24)),
+
+                                        // Accept button
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: CustomButton(
+                                            onClick: _handleAcceptInvitation,
+                                            text: tr("Accept Invitation",
+                                                "قبول الدعوة"),
+                                          ),
+                                        ),
+
+                                        SizedBox(height: context.h(12)),
+
+                                        // Reject button
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: OutlinedButton(
+                                            onPressed: _handleRejectInvitation,
+                                            style: OutlinedButton.styleFrom(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: context.h(16)),
+                                              side: const BorderSide(
+                                                  color: AppColors
+                                                      .primaryColor),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius
+                                                    .circular(12),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              tr("Reject", "رفض"),
+                                              style: TextStyle(
+                                                color: AppColors.primaryColor,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: context.sp(16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(height: context.h(16)),
+                              TextButton.icon(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.login,
+                                  );
                                 },
-                          icon: _isFetchingInvite
-                              ? const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : const Icon(Icons.search),
-                          label: Text(
-                            _isFetchingInvite ? 'Looking up...' : 'Fetch Invitation Details',
+                                icon: const Icon(Icons.arrow_back),
+                                label: Text(tr(
+                                    'Back to Login', 'العودة لتسجيل الدخول')),
+                              ),
+                            ],
                           ),
-                        ),
+
+                          if (state is InvitationLoading)
+                            Positioned.fill(
+                              child: AbsorbPointer(
+                                absorbing: true,
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.1),
+                                  child: const Center(child: LoadingPage()),
+                                ),
+                              ),
+                            )
+                        ],
                       ),
-                      _buildInvitationDetails(),
-                      _buildAccountCreationForm(),
-                      SizedBox(height: context.h(32)),
-                      SizedBox(
-                        width: double.infinity,
-                        child: CustomButton(
-                          onClick: _handleAcceptInvitation,
-                          text: "Accept Invitation",
-                        ),
-                      ),
-                      SizedBox(height: context.h(16)),
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          onPressed: _handleRejectInvitation,
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: context.h(16)),
-                            side: BorderSide(color: AppColors.primaryColor),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            "Reject",
-                            style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w700,
-                              fontSize: context.sp(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

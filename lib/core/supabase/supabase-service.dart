@@ -162,7 +162,13 @@ class FamilyMemberService {
     return publicUrl;
   }
 
-  Future<List<Map<String, dynamic>>> getFamiliesByDoctor(String doctorId) async {
+  Future<void> updateFamilyMember(String userId,
+      Map<String, dynamic> data) async {
+    await _client.from('family_members').update(data).eq('id', userId);
+  }
+
+  Future<List<Map<String, dynamic>>> getFamiliesByDoctor(
+      String doctorId) async {
     final response = await _client
         .from('family_members')
         .select()
@@ -173,8 +179,101 @@ class FamilyMemberService {
 }
 
 // ============== Doctor Service ==============
+// class DoctorService {
+//   final _client = SupabaseConfig.client;
+//
+//   Future<Map<String, dynamic>?> getDoctorById(String doctorId) async {
+//     final response = await _client
+//         .from('doctors')
+//         .select()
+//         .eq('id', doctorId)
+//         .maybeSingle();
+//     return response;
+//   }
+//
+//   Future<List<Map<String, dynamic>>> getDoctors() async {
+//     final response = await _client.from('doctors').select();
+//
+//     return response;
+//   }
+//
+//   /// Upload doctor profile photo and return public URL.
+//   /// Uses same storage bucket as patient avatars for simplicity.
+//   Future<String> uploadDoctorPhoto(String doctorId, File imageFile) async {
+//     final fileName = 'doctor_$doctorId.jpg';
+//     final bucket = _client.storage.from('patientImg');
+//
+//     try {
+//       await bucket.remove([fileName]);
+//     } catch (_) {}
+//
+//     await bucket.upload(
+//       fileName,
+//       imageFile,
+//       fileOptions: const FileOptions(upsert: true),
+//     );
+//
+//     final publicUrl = bucket.getPublicUrl(fileName);
+//
+//     // حاول نحفظ الرابط فى جدول الأطباء لو العمود موجود (photo)
+//     try {
+//       await _client
+//           .from('doctors')
+//           .update({'photo': publicUrl}).eq('id', doctorId);
+//     } catch (_) {
+//       // لو مفيش عمود photo نتجاهل الخطأ ونرجّع الـ URL على أى حال
+//     }
+//
+//     return publicUrl;
+//   }
+// }
+
+// ============== Appointments Service ==============
+// ============== Doctor Service ==============
 class DoctorService {
   final _client = SupabaseConfig.client;
+
+  Future<List<Map<String, dynamic>>> getDoctors() async {
+    final response = await _client.from('doctors').select();
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>?> getDoctorsByUserId(String userId) async {
+    final response = await _client
+        .from('doctors')
+        .select()
+        .eq('id', userId)
+        .maybeSingle();
+    return response;
+  }
+
+  Future<String> uploadDoctorPhoto(String doctorId, File imageFile) async {
+    final fileName = 'doctor_$doctorId.jpg';
+    final bucket = _client.storage.from('doctorImg');
+
+    try {
+      await bucket.remove([fileName]);
+    } catch (_) {}
+
+    await bucket.upload(fileName, imageFile,
+        fileOptions: const FileOptions(upsert: true));
+
+    final publicUrl = bucket.getPublicUrl(fileName);
+
+    return publicUrl;
+  }
+
+  Future<void> updateDoctorPhoto(String doctorId, String imageUrl) async {
+    final response = await _client
+        .from('doctors')
+        .update({
+      'profile_image_url': imageUrl,
+      'updated_at': DateTime.now().toIso8601String(),
+    })
+        .eq('id', doctorId)
+        .select();
+  }
 
   Future<Map<String, dynamic>?> getDoctorById(String doctorId) async {
     final response = await _client
@@ -184,45 +283,8 @@ class DoctorService {
         .maybeSingle();
     return response;
   }
-
-  Future<List<Map<String, dynamic>>> getDoctors() async {
-    final response = await _client.from('doctors').select();
-
-    return response;
-  }
-
-  /// Upload doctor profile photo and return public URL.
-  /// Uses same storage bucket as patient avatars for simplicity.
-  Future<String> uploadDoctorPhoto(String doctorId, File imageFile) async {
-    final fileName = 'doctor_$doctorId.jpg';
-    final bucket = _client.storage.from('patientImg');
-
-    try {
-      await bucket.remove([fileName]);
-    } catch (_) {}
-
-    await bucket.upload(
-      fileName,
-      imageFile,
-      fileOptions: const FileOptions(upsert: true),
-    );
-
-    final publicUrl = bucket.getPublicUrl(fileName);
-
-    // حاول نحفظ الرابط فى جدول الأطباء لو العمود موجود (photo)
-    try {
-      await _client
-          .from('doctors')
-          .update({'photo': publicUrl}).eq('id', doctorId);
-    } catch (_) {
-      // لو مفيش عمود photo نتجاهل الخطأ ونرجّع الـ URL على أى حال
-    }
-
-    return publicUrl;
-  }
 }
 
-// ============== Appointments Service ==============
 class AppointmentService {
   final _client = SupabaseConfig.client;
 

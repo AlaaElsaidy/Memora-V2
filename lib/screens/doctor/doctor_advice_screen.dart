@@ -79,7 +79,7 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
         _loadingAdvice = false;
       });
     } catch (e) {
-      _snack(tr('Failed to load advice', 'فشل تحميل النصائح') + ': $e');
+      _snack('${tr('Failed to load advice', 'فشل تحميل النصائح')}: $e');
       setState(() => _loadingAdvice = false);
     }
   }
@@ -96,7 +96,7 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
         _loadingFamilies = false;
       });
     } catch (e) {
-      _snack(tr('Failed to load families', 'فشل تحميل العائلات') + ': $e');
+      _snack('${tr('Failed to load families', 'فشل تحميل العائلات')}: $e');
       setState(() => _loadingFamilies = false);
     }
   }
@@ -253,7 +253,7 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
       _snack(tr('Advice sent successfully', 'تم إرسال النصيحة بنجاح'));
       _clearForm();
     } catch (e) {
-      _snack(tr('Failed to save advice', 'فشل حفظ النصيحة') + ': $e');
+      _snack('${tr('Failed to save advice', 'فشل حفظ النصيحة')}: $e');
     } finally {
       setState(() => _sending = false);
     }
@@ -302,8 +302,8 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
     } catch (e) {
       debugPrint('Delete advice error: $e');
       if (!mounted) return;
-      _snack(tr('Failed to delete advice', 'فشل حذف النصيحة') + ': $e');
-      
+      _snack('${tr('Failed to delete advice', 'فشل حذف النصيحة')}: $e');
+
       // Reload to ensure UI is in sync with database
       if (_doctorId != null) {
         await _loadAdvice(_doctorId!);
@@ -445,7 +445,7 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
                           Expanded(
                             child: Text(
                               t,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   height: 1.5,
                                   color: AppTheme.gray600),
@@ -636,7 +636,7 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
               )
             else
               DropdownButtonFormField<String>(
-                value: _selectedFamilyId,
+                initialValue: _selectedFamilyId,
                 decoration: InputDecoration(
                   labelText: tr('Select family', 'اختر عائلة'),
                   prefixIcon: const Icon(Icons.family_restroom),
@@ -644,7 +644,8 @@ class _DoctorAdviceScreenState extends State<DoctorAdviceScreen> {
                 ),
                 items: _families
                     .map(
-                      (f) => DropdownMenuItem(
+                      (f) =>
+                      DropdownMenuItem(
                         value: f['id'] as String?,
                         child: Text(
                           (f['name'] as String?) ?? tr('Family member', 'عضو عائلة'),

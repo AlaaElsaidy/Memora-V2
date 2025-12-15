@@ -151,7 +151,8 @@ class _FamilyActivitiesScreenState extends State<FamilyActivitiesScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(tr('Error deleting activity', 'خطأ في حذف النشاط') + ': $e')),
+          SnackBar(content: Text(
+              '${tr('Error deleting activity', 'خطأ في حذف النشاط')}: $e')),
         );
       }
     }
@@ -940,7 +941,8 @@ class _EditActivitiesViewState extends State<EditActivitiesView> {
       setState(() => _saving = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(tr('Error saving activity', 'خطأ في حفظ النشاط') + ': $e')),
+          SnackBar(content: Text(
+              '${tr('Error saving activity', 'خطأ في حفظ النشاط')}: $e')),
         );
       }
     }
@@ -973,7 +975,7 @@ class _EditActivitiesViewState extends State<EditActivitiesView> {
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: _selectedPatientId,
+                initialValue: _selectedPatientId,
                 decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: tr('Patient', 'مريض')),
@@ -981,7 +983,8 @@ class _EditActivitiesViewState extends State<EditActivitiesView> {
                   final patient = p['patients'] as Map<String, dynamic>?;
                   final patientId = patient?['id'] as String? ??
                       p['patient_id'] as String?;
-                  final patientName = patient?['name'] as String? ?? tr('Unknown', 'غير معروف');
+                  final patientName = patient?['name'] as String? ??
+                      tr('Unknown', 'غير معروف');
                   return DropdownMenuItem(
                     value: patientId,
                     child: Text(patientName),

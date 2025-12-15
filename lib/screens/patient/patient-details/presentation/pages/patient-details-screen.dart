@@ -102,7 +102,6 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
       );
     }
     
-    final width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) =>
           PatientDetailsCubit(PatientDetailsRepo(PatientService())),
@@ -154,14 +153,14 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
               return Stack(
                 children: [
                   Positioned(
-                    top: -width * 0.25,
-                    left: -width * 0.15,
-                    child: DecorCircle(size: width * 0.7),
+                    top: -context.w(430) * 0.25,
+                    left: -context.w(430) * 0.15,
+                    child: DecorCircle(size: context.w(430) * 0.7),
                   ),
                   Positioned(
-                    bottom: -width * 0.30,
-                    right: -width * 0.20,
-                    child: DecorCircle(size: width * 0.9),
+                    bottom: -context.w(430) * 0.30,
+                    right: -context.w(430) * 0.20,
+                    child: DecorCircle(size: context.w(430) * 0.9),
                   ),
                   SafeArea(
                     child: SingleChildScrollView(
@@ -265,16 +264,17 @@ class _PatientDetailsScreenState extends State<PatientDetailsScreen> {
                                                   Theme(
                                                 data:
                                                     Theme.of(context).copyWith(
-                                                  colorScheme:
+                                                      colorScheme:
                                                       const ColorScheme.light(
-                                                    primary:
+                                                        primary:
                                                         AppColors.primaryColor,
-                                                    onPrimary: Colors.white,
-                                                    surface: Colors.white,
-                                                    onSurface: Colors.black,
-                                                  ),
-                                                  dialogBackgroundColor:
-                                                      Colors.white,
+                                                        onPrimary: Colors.white,
+                                                        surface: Colors.white,
+                                                        onSurface: Colors.black,
+                                                      ),
+                                                      dialogTheme: const DialogThemeData(
+                                                          backgroundColor: Colors
+                                                              .white),
                                                 ),
                                                 child: child!,
                                               ),

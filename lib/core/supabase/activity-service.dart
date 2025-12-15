@@ -31,7 +31,7 @@ class ActivityService {
     };
 
     final response = await _client.from(_table).insert(payload).select().single();
-    return response as Map<String, dynamic>;
+    return response;
   }
 
   /// Get all activities for a patient (used by Patient screen)
@@ -151,7 +151,7 @@ class ActivityService {
         .select()
         .single();
 
-    return response as Map<String, dynamic>;
+    return response;
   }
 
   /// Toggle done status (Patient can mark as done/undone)
@@ -166,7 +166,7 @@ class ActivityService {
         .select()
         .single();
 
-    return response as Map<String, dynamic>;
+    return response;
   }
 
   /// Delete an activity (Family member can delete)

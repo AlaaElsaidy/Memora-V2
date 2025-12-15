@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../config/screen_sizer/size_extension.dart';
 import '../../theme/app_theme.dart';
 import '../../ai/lobna_voice_controller.dart';
 import '../../widgets/lobna_listen_button.dart';
@@ -107,7 +108,10 @@ class _PatientMainScreenState extends State<PatientMainScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: EdgeInsets.symmetric(
+              horizontal: context.w(8),
+              vertical: context.h(8),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -129,12 +133,15 @@ class _PatientMainScreenState extends State<PatientMainScreen> {
 
     return InkWell(
       onTap: () => setState(() => _currentIndex = index),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(context.w(12)),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.w(12),
+          vertical: context.h(8),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.teal50 : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(context.w(12)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -142,15 +149,15 @@ class _PatientMainScreenState extends State<PatientMainScreen> {
             Icon(
               icon,
               color: isSelected ? AppTheme.teal600 : AppTheme.gray500,
-              size: 24,
+              size: context.sp(25),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: context.h(4)),
             Text(
               label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: context.sp(11),
                 color: isSelected ? AppTheme.teal600 : AppTheme.gray500,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
               ),
             ),
           ],

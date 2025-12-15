@@ -46,6 +46,28 @@ class AuthService {
     await _client.auth.resetPasswordForEmail(email);
   }
 
+  // DEV/TEST ONLY: use service role client (if provided) to force-change password
+  Future<void> forceChangePasswordWithServiceRole({
+    required String email,
+    required String newPassword,
+    required SupabaseClient serviceClient,
+  }) async {
+    // 1) fetch user id from public users table by email
+    final user =
+    await serviceClient.from('users').select('id')
+        .eq('email', email)
+        .maybeSingle();
+    if (user == null || user['id'] == null) {
+      throw Exception('No user found for this email');
+    }
+
+    // 2) update password via admin API
+    await serviceClient.auth.admin.updateUserById(
+      user['id'] as String,
+      attributes: AdminUserAttributes(password: newPassword),
+    );
+  }
+
   User? getCurrentUser() {
     return _client.auth.currentUser;
   }

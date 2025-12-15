@@ -20,15 +20,17 @@ class DoctorChatScreen extends StatefulWidget {
 class _DoctorChatScreenState extends State<DoctorChatScreen> {
   final ChatService _chatService = ChatService();
   final MessageService _messageService = MessageService();
-  
+
   String? _doctorId;
   List<Map<String, dynamic>> _patientChats = [];
   List<Map<String, dynamic>> _familyChats = [];
   bool _loading = true;
-  Map<String, int> _unreadCounts = {};
+  final Map<String, int> _unreadCounts = {};
 
   bool get _isAr =>
-      (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ar';
+      (Localizations
+          .maybeLocaleOf(context)
+          ?.languageCode ?? 'en') == 'ar';
 
   String tr(String en, String ar) => _isAr ? ar : en;
 
@@ -242,12 +244,12 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.chat_bubble_outline,
+            const Icon(Icons.chat_bubble_outline,
                 size: 64, color: AppTheme.gray500),
             const SizedBox(height: 16),
             Text(
               tr('No patient chats yet', 'لا توجد محادثات مع المرضى بعد'),
-              style: TextStyle(color: AppTheme.gray500),
+              style: const TextStyle(color: AppTheme.gray500),
             ),
           ],
         ),
@@ -316,12 +318,12 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.family_restroom,
+            const Icon(Icons.family_restroom,
                 size: 64, color: AppTheme.gray500),
             const SizedBox(height: 16),
             Text(
               tr('No family chats yet', 'لا توجد محادثات مع العائلة بعد'),
-              style: TextStyle(color: AppTheme.gray500),
+              style: const TextStyle(color: AppTheme.gray500),
             ),
           ],
         ),

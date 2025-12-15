@@ -127,7 +127,8 @@ class InvitationRepo {
             }
           } else {
             // Email exists in auth but not in users table - this is a problem
-            return Left('Email is already registered in the system but account setup is incomplete. Please contact support or try a different email.');
+            return const Left(
+                'Email is already registered in the system but account setup is incomplete. Please contact support or try a different email.');
           }
         }
       }
@@ -206,11 +207,35 @@ class InvitationRepo {
           // The relation can be established when patient accepts the invitation
         }
       }
-      
+
       // If linking failed, log it but don't fail the invitation
       if (linkingError != null) {
         print('Warning: $linkingError');
         // Invitation is still created successfully
+      }
+
+      // Set doctor's id on patient if family member has one
+      try {
+        final client = SupabaseConfig.client;
+        final familyRow = await client
+            .from('family_members')
+            .select('doctor_id')
+            .eq('id', familyMemberId)
+            .maybeSingle();
+
+        final String? doctorId = familyRow?['doctor_id'] as String?;
+        if (doctorId != null && doctorId.isNotEmpty) {
+          // Update patients.doctor_id so patient can chat with doctor immediately
+          await client
+              .from('patients')
+              .update({'doctor_id': doctorId})
+              .eq('id', patientRecordId);
+        }
+      } catch (e) {
+        // If setting doctor_id fails, log but don't fail invitation
+        print(
+            'Warning: Failed to set doctor_id on patient: ${SupabaseErrorHandler
+                .handleError(e)}');
       }
 
       return Right(invitation);
@@ -338,6 +363,27 @@ class InvitationRepo {
         patientId: finalPatientId,
         familyMemberId: finalFamilyMemberId,
       );
+
+      // If family member already has a doctor assigned, propagate it to patient
+      try {
+        final client = SupabaseConfig.client;
+        final familyRow = await client
+            .from('family_members')
+            .select('doctor_id')
+            .eq('id', finalFamilyMemberId)
+            .maybeSingle();
+
+        final String? doctorId = familyRow?['doctor_id'] as String?;
+        if (doctorId != null && doctorId.isNotEmpty) {
+          // Update patients.doctor_id so patient chat can find their doctor
+          await client
+              .from('patients')
+              .update({'doctor_id': doctorId})
+              .eq('id', finalPatientId);
+        }
+      } catch (_) {
+        // لو حصل أى خطأ هنا، منسيبش قبول الدعوة يفشل – الربط الأساسى تم بالفعل
+      }
 
       // Mark invitation as accepted
       await _invitationService.acceptInvitation(invitationCode);

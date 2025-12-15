@@ -227,6 +227,15 @@ class PatientFamilyService {
 
     return response != null;
   }
+
+  /// Update family member phone number
+  Future<void> updateFamilyMemberPhone(String familyMemberId,
+      String phone) async {
+    await _client
+        .from('family_members')
+        .update({'phone': phone})
+        .eq('id', familyMemberId);
+  }
 }
 
 

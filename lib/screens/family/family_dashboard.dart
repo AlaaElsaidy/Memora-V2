@@ -135,8 +135,8 @@ class FamilyDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      child: Padding(
+        padding: const EdgeInsetsGeometry.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -152,11 +152,11 @@ class FamilyDashboard extends StatelessWidget {
                     final avatarUrl =
                         userSnapshot.data?['image_url'] as String?;
                     final patients = patientsSnapshot.data ?? [];
-                    final firstPatient = patients.isNotEmpty 
+                    final firstPatient = patients.isNotEmpty
                         ? patients.first['patients'] as Map<String, dynamic>?
                         : null;
                     final patientName = firstPatient?['name'] as String?;
-                    
+
                     return Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -380,7 +380,7 @@ class FamilyDashboard extends StatelessWidget {
               builder: (context, snapshot) {
                 final advices = snapshot.data ?? [];
                 final videoTips = <VideoTip>[];
-                
+
                 // Extract video URLs from doctor advice
                 for (var advice in advices) {
                   if (advice.videoUrl != null && advice.videoUrl!.isNotEmpty) {
@@ -389,11 +389,11 @@ class FamilyDashboard extends StatelessWidget {
                     final uri = Uri.tryParse(advice.videoUrl!);
                     if (uri != null) {
                       if (uri.host.contains('youtube.com') || uri.host.contains('youtu.be')) {
-                        youtubeId = uri.queryParameters['v'] ?? 
-                                   uri.pathSegments.last;
+                        youtubeId = uri.queryParameters['v'] ??
+                            uri.pathSegments.last;
                       }
                     }
-                    
+
                     if (youtubeId != null && youtubeId.isNotEmpty) {
                       videoTips.add(VideoTip(
                         title: advice.title ?? tr(context, 'Doctor Advice Video', 'فيديو نصيحة الطبيب'),
@@ -402,12 +402,12 @@ class FamilyDashboard extends StatelessWidget {
                     }
                   }
                 }
-                
+
                 // If no videos from advice, show empty state or remove section
                 if (videoTips.isEmpty) {
                   return const SizedBox.shrink();
                 }
-                
+
                 return VideoTipsSection(
                   videos: videoTips,
                   onOpen: (tip) {
@@ -429,7 +429,7 @@ class FamilyDashboard extends StatelessWidget {
               builder: (context, snapshot) {
                 String doctorName = 'Doctor';
                 String? doctorPhone;
-                
+
                 if (snapshot.hasData && snapshot.data != null) {
                   final doctor = snapshot.data!['doctor'] as Map<String, dynamic>?;
                   if (doctor != null) {
@@ -437,7 +437,7 @@ class FamilyDashboard extends StatelessWidget {
                     doctorPhone = doctor['phone'] as String?;
                   }
                 }
-                
+
                 return Card(
                   color: Colors.red[50],
                   child: InkWell(
@@ -613,7 +613,7 @@ class _DoctorAdviceCard extends StatelessWidget {
                     Container(
                       width: 24,
                       height: 24,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppTheme.teal600,
                         shape: BoxShape.circle,
                       ),
@@ -1067,9 +1067,9 @@ class _InlineVideoPlayerState extends State<_InlineVideoPlayer> {
                               ),
                               Expanded(
                                 child: Text(
-                                  _formatDuration(_controller!.value.position) +
-                                      ' / ' +
-                                      _formatDuration(_controller!.value.duration),
+                                  '${_formatDuration(_controller!.value
+                                      .position)} / ${_formatDuration(
+                                      _controller!.value.duration)}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,

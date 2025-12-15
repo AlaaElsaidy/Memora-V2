@@ -25,21 +25,19 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           Positioned(
-            top: -width * 0.25,
-            left: -width * 0.15,
-            child: DecorCircle(size: width * 0.7),
+            top: -context.w(430) * 0.25,
+            left: -context.w(430) * 0.15,
+            child: DecorCircle(size: context.w(430) * 0.7),
           ),
           Positioned(
-            bottom: -width * 0.30,
-            right: -width * 0.20,
-            child: DecorCircle(size: width * 0.9),
+            bottom: -context.w(430) * 0.30,
+            right: -context.w(430) * 0.20,
+            child: DecorCircle(size: context.w(430) * 0.9),
           ),
 
           SafeArea(

@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../config/screen_sizer/size_extension.dart';
 import '../../theme/app_theme.dart';
 
 /// =============================================================
@@ -456,9 +457,12 @@ class _QuestionDialogState extends State<_QuestionDialog> {
                       child: TextFormField(
                         controller: [_opt1, _opt2, _opt3][i],
                         decoration:
-                            InputDecoration(labelText: tr('Option', 'خيار') + ' ${i + 1}'),
+                        InputDecoration(labelText: '${tr('Option',
+                            'خيار')} ${i + 1}'),
                         validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? tr('Required', 'مطلوب') : null,
+                        (v == null || v
+                            .trim()
+                            .isEmpty) ? tr('Required', 'مطلوب') : null,
                       ),
                     ),
                   ],
@@ -811,7 +815,8 @@ class _EditableFaceRecognitionScreenState
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(tr('Item', 'عنصر') + ' ${_index + 1}/${_faces.length}',
+                          Text('${tr('Item', 'عنصر')} ${_index + 1}/${_faces
+                              .length}',
                               style: const TextStyle(
                                   color: AppTheme.teal900,
                                   fontWeight: FontWeight.w600)),
@@ -888,8 +893,10 @@ class _EditableFaceRecognitionScreenState
                               color: AppTheme.teal50,
                               borderRadius: BorderRadius.circular(12)),
                           child: Text(
-                            tr('Hint', 'تلميح') + ': ${_hintRelation ? current.relation : '-'}'
-                            ' • ${_hintFirstLetter ? tr('Name starts with', 'الاسم يبدأ بـ') + ' "${current.name[0]}"' : ''}',
+                            '${tr('Hint', 'تلميح')}: ${_hintRelation ? current
+                                .relation : '-'} • ${_hintFirstLetter ? '${tr(
+                                'Name starts with', 'الاسم يبدأ بـ')} "${current
+                                .name[0]}"' : ''}',
                             style: const TextStyle(color: AppTheme.teal900),
                           ),
                         ),
@@ -916,7 +923,8 @@ class _EditableFaceRecognitionScreenState
                       ),
                       const SizedBox(height: 4),
                       // Correct answer label
-                      Text(tr('Correct answer', 'الإجابة الصحيحة') + ': $correctText',
+                      Text('${tr(
+                          'Correct answer', 'الإجابة الصحيحة')}: $correctText',
                           style: const TextStyle(color: AppTheme.gray600)),
                       const SizedBox(height: 8),
 
@@ -1054,8 +1062,9 @@ class _EditablePhotoMemoryScreenState extends State<EditablePhotoMemoryScreen> {
         var fi = 0;
         while (distractors.length < 2) {
           final cand = fallback[fi % fallback.length];
-          if (cand != correct && !distractors.contains(cand))
+          if (cand != correct && !distractors.contains(cand)) {
             distractors.add(cand);
+          }
           fi++;
         }
         final options = [correct, ...distractors]..shuffle(rnd);
@@ -1079,8 +1088,9 @@ class _EditablePhotoMemoryScreenState extends State<EditablePhotoMemoryScreen> {
         var fi = 0;
         while (distractors.length < 2) {
           final cand = fallback[fi % fallback.length];
-          if (cand != correct && !distractors.contains(cand))
+          if (cand != correct && !distractors.contains(cand)) {
             distractors.add(cand);
+          }
           fi++;
         }
         final options = [correct, ...distractors]..shuffle(rnd);
@@ -1180,8 +1190,9 @@ class _EditablePhotoMemoryScreenState extends State<EditablePhotoMemoryScreen> {
   _BtnState _btnState(int i) {
     if (_selectedIdx == -1) return _BtnState.idle;
     if (i == _currentQ.correctIndex) return _BtnState.correct;
-    if (i == _selectedIdx && i != _currentQ.correctIndex)
+    if (i == _selectedIdx && i != _currentQ.correctIndex) {
       return _BtnState.wrong;
+    }
     return _BtnState.disabled;
   }
 
@@ -1217,7 +1228,9 @@ class _EditablePhotoMemoryScreenState extends State<EditablePhotoMemoryScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(tr('Photo', 'صورة') + ' ${_photoIdx + 1}/${_photos.length}',
+                          Text(
+                              '${tr('Photo', 'صورة')} ${_photoIdx + 1}/${_photos
+                                  .length}',
                               style: const TextStyle(
                                   color: AppTheme.teal900,
                                   fontWeight: FontWeight.w600)),
@@ -1289,7 +1302,8 @@ class _EditablePhotoMemoryScreenState extends State<EditablePhotoMemoryScreen> {
                       ),
                       const SizedBox(height: 4),
                       // Correct answer label
-                      Text(tr('Correct answer', 'الإجابة الصحيحة') + ': $correctText',
+                      Text('${tr(
+                          'Correct answer', 'الإجابة الصحيحة')}: $correctText',
                           style: const TextStyle(color: AppTheme.gray600)),
                       const SizedBox(height: 8),
 

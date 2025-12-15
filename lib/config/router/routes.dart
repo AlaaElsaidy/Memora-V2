@@ -19,4 +19,5 @@ class AppRoutes {
   static const String familyMain = "/familyMain";
   static const String invitationAcceptance = "/invitation";
   static const String roleSelection = "/roleSelection";
+  static const String resetPassword = "/resetPassword";
 }
