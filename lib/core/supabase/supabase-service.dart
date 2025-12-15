@@ -264,13 +264,17 @@ class DoctorService {
     return publicUrl;
   }
 
+  Future<void> updateDoctor(String doctorId, Map<String, dynamic> data) async {
+    await _client.from('doctors').update(data).eq('id', doctorId);
+  }
+
   Future<void> updateDoctorPhoto(String doctorId, String imageUrl) async {
     final response = await _client
         .from('doctors')
         .update({
-      'profile_image_url': imageUrl,
-      'updated_at': DateTime.now().toIso8601String(),
-    })
+          'profile_image_url': imageUrl,
+          'updated_at': DateTime.now().toIso8601String(),
+        })
         .eq('id', doctorId)
         .select();
   }

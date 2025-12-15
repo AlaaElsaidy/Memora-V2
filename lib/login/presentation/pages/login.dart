@@ -124,6 +124,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   (route) => false,
                 );
               } else {
+                // Doctor role
+                await SharedPrefsHelper.saveString(
+                    "doctorUid", state.user!['id']);
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppRoutes.doctorMain,
