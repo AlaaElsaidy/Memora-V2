@@ -17,7 +17,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  kllllllllllllll
   try {
     await Injector.inject();
   } catch (e) {
